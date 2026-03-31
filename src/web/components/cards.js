@@ -15,9 +15,9 @@ import {
   cx,
 } from './ui';
 
-export function FeedCard({ booking, fighter }) {
+export function FeedCard({ booking, fighter, onSelect }) {
   return (
-    <div className="icard">
+    <button className="icard icard-btn" onClick={onSelect} type="button">
       <div className="itop">
         <div>
           <div className="isub">
@@ -36,7 +36,7 @@ export function FeedCard({ booking, fighter }) {
           { label: 'OFFER', value: booking.offeredPrice, valueClassName: 'gold' },
         ]}
       />
-    </div>
+    </button>
   );
 }
 
@@ -131,14 +131,14 @@ export function FighterDetailCard({
   );
 }
 
-export function BookingCard({ booking, fighter, mode, onAccept, onDecline }) {
+export function BookingCard({ booking, fighter, mode, onSelect }) {
   const displayName = mode === 'incoming' ? booking.clientName : fighter?.name || 'Unknown';
   const timestamp = booking.decisionAt
     ? `Updated ${formatDateTime(booking.decisionAt)}`
     : `Requested ${formatDateTime(booking.createdAt)}`;
 
   return (
-    <div className="icard">
+    <button className="icard icard-btn" onClick={onSelect} type="button">
       <div className="itop">
         <div>
           <div className="isub">{booking.eventName}</div>
@@ -159,22 +159,11 @@ export function BookingCard({ booking, fighter, mode, onAccept, onDecline }) {
       />
 
       <div className="itime">{timestamp}</div>
-
-      {mode === 'incoming' && booking.status === 'pending' ? (
-        <div className="iacts">
-          <Button onClick={onAccept} size="sm" tone="accept">
-            ✓ ACCEPT
-          </Button>
-          <Button onClick={onDecline} size="sm" tone="decline">
-            ✗ DECLINE
-          </Button>
-        </div>
-      ) : null}
-    </div>
+    </button>
   );
 }
 
-export function ScheduleCard({ booking, fighter, userFighterId, workspace }) {
+export function ScheduleCard({ booking, fighter, onSelect, userFighterId, workspace }) {
   const roleLabel =
     workspace === 'booker'
       ? 'Booked by you'
@@ -189,7 +178,7 @@ export function ScheduleCard({ booking, fighter, userFighterId, workspace }) {
   const eventDate = new Date(`${booking.date}T12:00:00Z`);
 
   return (
-    <div className="schd">
+    <button className="schd schd-btn" onClick={onSelect} type="button">
       <div className="dblock">
         <div className="dm">{monthName(eventDate).toUpperCase()}</div>
         <div className="dd">{eventDate.getUTCDate()}</div>
@@ -203,7 +192,7 @@ export function ScheduleCard({ booking, fighter, userFighterId, workspace }) {
           {roleLabel} · {booking.visibility === 'public' ? 'PUBLIC' : 'PRIVATE'}
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 

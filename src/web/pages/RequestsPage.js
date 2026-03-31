@@ -6,10 +6,9 @@ import { useMarketplace } from '../state/MarketplaceContext';
 
 export default function RequestsPage() {
   const {
-    acceptBooking,
-    declineBooking,
     fighterMap,
     incomingRequests,
+    openBooking,
     outgoingRequests,
     workspace,
   } = useMarketplace();
@@ -40,6 +39,7 @@ export default function RequestsPage() {
                   fighter={fighterMap[booking.fighterId]}
                   key={booking.id}
                   mode="outgoing"
+                  onSelect={() => openBooking(booking.id, 'requests')}
                 />
               ))}
             </div>
@@ -64,8 +64,7 @@ export default function RequestsPage() {
                   fighter={fighterMap[booking.fighterId]}
                   key={booking.id}
                   mode="incoming"
-                  onAccept={() => acceptBooking(booking.id)}
-                  onDecline={() => declineBooking(booking.id)}
+                  onSelect={() => openBooking(booking.id, 'requests')}
                 />
               ))}
             </div>

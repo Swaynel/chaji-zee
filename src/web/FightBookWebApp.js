@@ -8,6 +8,8 @@ import { MarketplaceProvider, useMarketplace } from './state/MarketplaceContext'
 const pageModules = {
   feed: lazy(() => import('./pages/FeedPage')),
   fighters: lazy(() => import('./pages/FightersPage')),
+  fighter: lazy(() => import('./pages/FighterDetailPage')),
+  booking: lazy(() => import('./pages/BookingDetailPage')),
   requests: lazy(() => import('./pages/RequestsPage')),
   schedule: lazy(() => import('./pages/SchedulePage')),
   profile: lazy(() => import('./pages/ProfilePage')),

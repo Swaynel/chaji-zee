@@ -68,6 +68,7 @@ function initials(name) {
 export default function AppShell({ children }) {
   const {
     activePage,
+    bookingSourcePage,
     currentUser,
     currentUserFighter,
     flash,
@@ -79,6 +80,18 @@ export default function AppShell({ children }) {
 
   const topSeed = currentUserFighter?.imageSeed || initials(currentUser.name);
   const roleLine = `${currentUser.promoterName.toUpperCase()} · BOOKER + FIGHTER`;
+
+  function isNavActive(key) {
+    if (activePage === 'booking') {
+      return bookingSourcePage === key;
+    }
+
+    if (key === 'fighters') {
+      return activePage === 'fighters' || activePage === 'fighter';
+    }
+
+    return activePage === key;
+  }
 
   return (
     <div id="app">
@@ -115,7 +128,7 @@ export default function AppShell({ children }) {
       <div id="nav">
         {pageOptions.map(({ key, label, Icon }) => (
           <button
-            className={cx('nb', activePage === key && 'on')}
+            className={cx('nb', isNavActive(key) && 'on')}
             data-pg={key}
             key={key}
             onClick={() => navigateToPage(key)}

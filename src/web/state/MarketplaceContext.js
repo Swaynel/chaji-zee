@@ -41,6 +41,14 @@ function normalizeWorkspace(mode) {
   return ['both', 'booker', 'fighter', 'public'].includes(mode) ? mode : 'both';
 }
 
+function isFighterRoute(page) {
+  return page === 'fighters' || page === 'fighter';
+}
+
+function normalizeBookingSource(page) {
+  return ['feed', 'requests', 'schedule', 'profile'].includes(page) ? page : 'feed';
+}
+
 export function MarketplaceProvider({ buildHash, children, navigate, route }) {
   const [fighters, setFighters] = useState(initialFighters);
   const [bookings, setBookings] = useState(initialBookings);
@@ -50,13 +58,20 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
   const defaultFighterId = getDefaultFighterId(fighters, currentUser.fighterProfileId);
   const fighterMap = buildFighterMap(fighters);
   const workspace = normalizeWorkspace(route.params.mode);
-  const selectedFighterId = route.page === 'fighters'
+  const selectedFighterId = isFighterRoute(route.page)
     ? route.params.fighter || defaultFighterId
     : defaultFighterId;
   const selectedFighter = fighterMap[selectedFighterId] || null;
+  const selectedBookingId = route.page === 'booking' ? route.params.booking || null : null;
+  const selectedBooking = selectedBookingId
+    ? bookings.find((booking) => booking.id === selectedBookingId) || null
+    : null;
+  const bookingSourcePage = route.page === 'booking'
+    ? normalizeBookingSource(route.params.from)
+    : null;
   const currentUserFighter = fighterMap[currentUser.fighterProfileId] || null;
   const composerVisible =
-    route.page === 'fighters' && route.params.compose === '1' && workspace === 'booker';
+    route.page === 'fighter' && route.params.compose === '1' && workspace === 'booker';
 
   const [bookingDraft, setBookingDraft] = useState(() =>
     createBookingDraft(fighterMap[defaultFighterId] || fighters[0]),
@@ -109,14 +124,23 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
       ...overrides,
     };
 
-    if (page === 'fighters') {
+    if (isFighterRoute(page)) {
       nextParams.fighter = overrides.fighter || selectedFighterId || defaultFighterId;
       if (!(nextParams.mode === 'booker' && overrides.compose === '1')) {
         delete nextParams.compose;
       }
+      delete nextParams.booking;
+      delete nextParams.from;
+    } else if (page === 'booking') {
+      nextParams.booking = overrides.booking || selectedBookingId;
+      nextParams.from = normalizeBookingSource(overrides.from || bookingSourcePage || route.page);
+      delete nextParams.fighter;
+      delete nextParams.compose;
     } else {
       delete nextParams.fighter;
       delete nextParams.compose;
+      delete nextParams.booking;
+      delete nextParams.from;
     }
 
     return nextParams;
@@ -129,7 +153,7 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
   function hrefForWorkspace(nextWorkspace) {
     const overrides = { mode: nextWorkspace };
 
-    if (route.page === 'fighters' && composerVisible && nextWorkspace === 'booker') {
+    if (route.page === 'fighter' && composerVisible && nextWorkspace === 'booker') {
       overrides.compose = '1';
     }
 
@@ -140,18 +164,25 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
     navigate(page, getPageParams(page, overrides));
   }
 
+  function openBooking(bookingId, fromPage = route.page) {
+    navigate('booking', getPageParams('booking', {
+      booking: bookingId,
+      from: normalizeBookingSource(fromPage === 'booking' ? bookingSourcePage : fromPage),
+    }));
+  }
+
   function setWorkspace(nextWorkspace) {
     navigate(route.page, getPageParams(route.page, { mode: nextWorkspace }));
   }
 
   function selectFighter(fighterId) {
-    navigate('fighters', getPageParams('fighters', { fighter: fighterId }));
+    navigate('fighter', getPageParams('fighter', { fighter: fighterId }));
   }
 
   function openComposer(fighterId) {
     const fighter = fighterMap[fighterId];
     setBookingDraft(createBookingDraft(fighter));
-    navigate('fighters', getPageParams('fighters', {
+    navigate('fighter', getPageParams('fighter', {
       mode: 'booker',
       fighter: fighterId,
       compose: '1',
@@ -159,7 +190,7 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
   }
 
   function closeComposer() {
-    navigate('fighters', getPageParams('fighters', { fighter: selectedFighterId }));
+    navigate('fighter', getPageParams('fighter', { fighter: selectedFighterId }));
   }
 
   function updateBookingDraft(field, value) {
@@ -342,6 +373,7 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
         acceptBooking,
         bookings,
         bookingDraft,
+        bookingSourcePage,
         closeComposer,
         composerVisible,
         currentUser,
@@ -357,6 +389,7 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
         navigateToPage,
         nextPublicEvent,
         notifications,
+        openBooking,
         openComposer,
         outgoingRequests,
         pendingIncomingCount,
@@ -365,6 +398,8 @@ export function MarketplaceProvider({ buildHash, children, navigate, route }) {
         selectFighter,
         selectedFighter,
         selectedFighterId,
+        selectedBooking,
+        selectedBookingId,
         setWorkspace,
         submitBooking,
         updateAvailability,

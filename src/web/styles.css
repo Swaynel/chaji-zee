@@ -276,6 +276,13 @@ button {
   overflow: hidden;
 }
 
+.card-btn {
+  width: 100%;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
 .card-al {
   border-left: 3px solid var(--fire);
 }
@@ -291,6 +298,28 @@ button {
 
 .cb {
   padding: 13px 15px;
+}
+
+.detail-page-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.detail-page-copy {
+  min-width: 0;
+}
+
+.detail-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
 }
 
 .slbl {
@@ -436,6 +465,13 @@ button {
 
 .icard:hover {
   border-color: var(--ghost);
+}
+
+.icard-btn {
+  width: 100%;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
 }
 
 .itop {
@@ -899,6 +935,13 @@ textarea.finp {
 
 .schd:hover {
   border-color: var(--ghost);
+}
+
+.schd-btn {
+  width: 100%;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
 }
 
 .dblock {

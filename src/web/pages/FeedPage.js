@@ -6,7 +6,7 @@ import { Badge, Divider, EmptyState, MetaRows, MetricTile } from '../components/
 import { useMarketplace } from '../state/MarketplaceContext';
 
 export default function FeedPage() {
-  const { fighterMap, metrics, nextPublicEvent, publicFeed } = useMarketplace();
+  const { fighterMap, metrics, nextPublicEvent, openBooking, publicFeed } = useMarketplace();
 
   return (
     <>
@@ -17,7 +17,11 @@ export default function FeedPage() {
       </div>
 
       {nextPublicEvent ? (
-        <div className="card card-al">
+        <button
+          className="card card-al card-btn"
+          onClick={() => openBooking(nextPublicEvent.id, 'feed')}
+          type="button"
+        >
           <div className="ch">
             <div>
               <div className="slbl">UP NEXT</div>
@@ -39,7 +43,7 @@ export default function FeedPage() {
               ]}
             />
           </div>
-        </div>
+        </button>
       ) : (
         <div className="card card-al">
           <div className="cb">
@@ -61,6 +65,7 @@ export default function FeedPage() {
               booking={booking}
               fighter={fighterMap[booking.fighterId]}
               key={booking.id}
+              onSelect={() => openBooking(booking.id, 'feed')}
             />
           ))}
         </div>

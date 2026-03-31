@@ -9,6 +9,7 @@ export default function SchedulePage() {
     currentUser,
     currentUserFighter,
     fighterMap,
+    openBooking,
     scheduleItems,
     updateAvailability,
     workspace,
@@ -23,6 +24,7 @@ export default function SchedulePage() {
               booking={booking}
               fighter={fighterMap[booking.fighterId]}
               key={booking.id}
+              onSelect={() => openBooking(booking.id, 'schedule')}
               userFighterId={currentUser.fighterProfileId}
               workspace={workspace}
             />

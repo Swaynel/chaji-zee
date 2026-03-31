@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const routeKeys = ['feed', 'fighters', 'requests', 'schedule', 'profile'];
+export const routeKeys = ['feed', 'fighters', 'fighter', 'booking', 'requests', 'schedule', 'profile'];
 
 const defaultRoute = {
   page: 'feed',
