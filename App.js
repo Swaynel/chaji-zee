@@ -1,7 +1,7 @@
 import React from 'react';
 
-import FightBookApp from './src/FightBookApp';
+import NativeFallback from './src/native/NativeFallback';
 
 export default function App() {
-  return <FightBookApp />;
+  return <NativeFallback />;
 }
