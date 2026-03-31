@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "FightBook",
+    "slug": "fightbook",
+    "version": "1.0.0",
+    "sdkVersion": "55.0.0",
+    "platforms": ["ios", "android", "web"]
+  }
+}
